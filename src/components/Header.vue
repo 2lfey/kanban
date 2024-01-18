@@ -1,6 +1,8 @@
 <script setup>
-
 import { ref } from 'vue'
+import { useEventBus } from '../hooks/useEventBus';
+
+const { emit } = useEventBus();
 
 const theme = ref(localStorage.getItem('theme'))
 
@@ -10,17 +12,21 @@ const toggleTheme = () => {
 	localStorage.setItem('theme', theme.value)
 }
 
-</script>
+const onNewCard = () => {
+	emit('show-card-creation')
+}
 
+</script>
 <template>
 	<header class="py-4 w-full">
 
 		<div class="flex gap-4 items-center justify-end">
 
-			<button class="px-3 py-1.5 font-semibold text-sm bg-primary-500 hover:bg-primary-700 rounded text-white">
+			<button @click="onNewCard"
+				class="px-3 py-1.5 font-semibold text-sm bg-primary-500 hover:bg-primary-700 rounded text-white">
 				New card
 			</button>
-			
+
 
 			<button @click="toggleTheme" :class="{ 'bg-primary-500': theme === 'dark' }"
 				class="h-6 transition-colors border-2 border-primary-500 rounded-full w-11">
