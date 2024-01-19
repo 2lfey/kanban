@@ -42,11 +42,11 @@ const time = computed(() => {
 <template>
 	<div v-show="!isEditing"
 		class="group/card relative flex flex-col items-end p-4 rounded-lg bg-gray-100 dark:bg-gray-800 transition duration cursor-pointer">
-		<div class="absolute hidden group-hover/card:flex top-2 right-2 rounded bg-gray-700">
+		<div class="absolute hidden group-hover/card:flex top-2 right-2 rounded bg-gray-200 dark:bg-gray-700">
 
 			<!-- move left -->
 
-			<div v-show="canMoveLeft" @click="emit('moveLeft', card)" class="p-1.5 rounded hover:bg-gray-800">
+			<div v-show="canMoveLeft" @click="emit('moveLeft', card)" class="p-1.5 rounded hover:bg-gray-100 hover:dark:bg-gray-800">
 				<svg class="w-4 h-4 text-primary-600 hover:text-primary-700" fill="currentColor" viewBox="0 0 16 16"
 					xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
 					<path clip-rule="evenodd" fill-rule="evenodd"
@@ -57,7 +57,7 @@ const time = computed(() => {
 
 			<!-- delete -->
 
-			<div @click="emit('deleteCard', card)" class="p-1.5 rounded hover:bg-gray-800">
+			<div @click="emit('deleteCard', card)" class="p-1.5 rounded hover:bg-gray-100 hover:dark:bg-gray-800">
 				<svg class="w-4 h-4 text-primary-600 hover:text-primary-700" fill="currentColor" viewBox="0 0 16 16"
 					xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
 					<path clip-rule="evenodd" fill-rule="evenodd"
@@ -68,7 +68,7 @@ const time = computed(() => {
 
 			<!-- edit -->
 
-			<div @click="isEditing = true" class="p-1.5 rounded hover:bg-gray-800">
+			<div @click="isEditing = true" class="p-1.5 rounded hover:bg-gray-100 hover:dark:bg-gray-800">
 				<svg class="w-4 h-4 text-primary-600 hover:text-primary-700" fill="currentColor" viewBox="0 0 16 16"
 					xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
 					<path
@@ -82,7 +82,7 @@ const time = computed(() => {
 
 			<!-- move rigfht -->
 
-			<div v-show="canMoveRight" @click="emit('moveRight', card)" class="p-1.5 rounded hover:bg-gray-800">
+			<div v-show="canMoveRight" @click="emit('moveRight', card)" class="p-1.5 rounded hover:bg-gray-100 hover:dark:bg-gray-800">
 				<svg class="w-4 h-4 text-primary-600 hover:text-primary-700" fill="currentColor" viewBox="0 0 16 16"
 					xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
 					<path clip-rule="evenodd" fill-rule="evenodd"
