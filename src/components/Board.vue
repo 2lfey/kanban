@@ -1,9 +1,11 @@
 <script setup>
 import Card from './Card.vue'
 
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted, watch, onBeforeMount } from 'vue'
 
 import { useEventBus } from '../hooks/useEventBus';
+
+const { on } = useEventBus()
 
 const board = reactive({
 	planned: {
@@ -12,12 +14,7 @@ const board = reactive({
 	},
 	inProgress: {
 		title: 'In Progress',
-		items: [{
-			title: 'In Progress',
-			description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
-			createdAt: '',
-			deadline: ''
-		}]
+		items: []
 	},
 	testing: {
 		title: 'Testing',
@@ -27,12 +24,6 @@ const board = reactive({
 		title: 'Completed',
 		items: []
 	}
-})
-
-const { on } = useEventBus()
-
-on('create-card', (card) => {
-	board.planned.items.push(card)
 })
 
 const columns = Object.entries(board).map((entry) => {
@@ -49,6 +40,39 @@ const columns = Object.entries(board).map((entry) => {
 	return col
 })
 
+onBeforeMount(() => {
+	const plannedItems = JSON.parse(localStorage.getItem('plannedItems'))
+	if (plannedItems) {
+		board.planned.items = plannedItems
+	}
+
+	const inProgressItems = JSON.parse(localStorage.getItem('inProgressItems'))
+	if (inProgressItems) {
+		board.inProgress.items = inProgressItems
+	}
+
+	const testingItems = JSON.parse(localStorage.getItem('testingItems'))
+	if (testingItems) {
+		board.testing.items = testingItems
+	}
+
+	const completedItems = JSON.parse(localStorage.getItem('completedItems'))
+	if (completedItems) {
+		board.completed.items = completedItems
+	}
+})
+
+watch(board, val => {
+	localStorage.setItem('plannedItems', JSON.stringify(val.planned.items))
+	localStorage.setItem('inProgressItems', JSON.stringify(val.inProgress.items))
+	localStorage.setItem('testingItems', JSON.stringify(val.testing.items))
+	localStorage.setItem('completedItems', JSON.stringify(val.completed.items))
+}, { deep: true })
+
+on('create-card', (card) => {
+	board.planned.items.push(card)
+})
+
 </script>
 
 <template>
@@ -60,8 +84,8 @@ const columns = Object.entries(board).map((entry) => {
 			</h2>
 
 			<div class="flex flex-col gap-4">
-				<Card v-for="(card, index) in column.items" @delete-card="column.onDelete"
-					@update-card="column.onUpdate" :key="index" :card="card" />
+				<Card v-for="(card, index) in column.items" @delete-card="column.onDelete" @update-card="column.onUpdate"
+					:key="index" :card="card" />
 			</div>
 		</section>
 
