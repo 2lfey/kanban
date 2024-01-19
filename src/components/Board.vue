@@ -13,7 +13,7 @@ const board = reactive({
 		items: []
 	},
 	inProgress: {
-		title: 'In Progress',
+		title: 'In progress',
 		items: []
 	},
 	testing: {
@@ -35,6 +35,37 @@ const columns = Object.entries(board).map((entry) => {
 	col.onDelete = (val) => {
 		const index = col.items.indexOf(val)
 		col.items.splice(index, 1)
+	}
+
+	col.onMoveLeft = val => {
+		if (col.title === 'Planned') {
+			return
+		}
+		col.onDelete(val)
+
+		if (col.title === 'In progress') {
+			board.planned.items.push(val)
+		} else if (col.title === 'Testing') {
+			board.inProgress.items.push(val)
+		} else { // if (col.title === 'Completed') {
+			board.testing.items.push(val)
+		}
+	}
+
+	col.onMoveRight = (val) => {
+		if (col.title === 'Completed') {
+			return
+		}
+
+		col.onDelete(val)
+
+		if (col.title === 'Planned') {
+			board.inProgress.items.push(val)
+		} else if (col.title === 'In progress') {
+			board.testing.items.push(val)
+		} else { // if (col.title === 'Testing') {
+			board.completed.items.push(val)
+		}
 	}
 
 	return col
@@ -85,6 +116,7 @@ on('create-card', (card) => {
 
 			<div class="flex flex-col gap-4">
 				<Card v-for="(card, index) in column.items" @delete-card="column.onDelete" @update-card="column.onUpdate"
+					@move-left="column.onMoveLeft" @move-right="column.onMoveRight" :can-move-left="column.title !== 'Planned'" :can-move-right="column.title !== 'Completed'"
 					:key="index" :card="card" />
 			</div>
 		</section>
