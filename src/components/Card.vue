@@ -2,7 +2,7 @@
 
 import Input from './Input.vue';
 
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 const props = defineProps({
 	card: Object
@@ -14,7 +14,6 @@ const cardCopy = ref(JSON.parse(JSON.stringify(props.card)))
 
 const isEditing = ref(false)
 
-
 const cancelEditing = () => {
 	isEditing.value = false
 	cardCopy.value = JSON.parse(JSON.stringify(props.card))
@@ -22,9 +21,20 @@ const cancelEditing = () => {
 
 const saveCardCopy = () => {
 	isEditing.value = false
-	console.log(props.card, cardCopy.value);
+
+	const now = new Date(Date.now())
+	cardCopy.value.updatedAt = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`
+
 	emit('updateCard', props.card, cardCopy.value)
 }
+
+const time = computed(() => {
+	if (props.card.updatedAt){
+		return `${props.card.updatedAt} / ${props.card.createdAt}`
+	} else {
+		return props.card.createdAt
+	}
+})
 </script>
 
 <template>
@@ -67,7 +77,7 @@ const saveCardCopy = () => {
 
 		<p class="mt-4 w-full">{{ card.description }}</p>
 
-		<span class="mt-4 font-semibold text-xs text-gray-500">{{ card.createdAt }}</span>
+		<span class="mt-4 font-semibold text-xs text-gray-500">{{ time }}</span>
 	</div>
 
 	<div v-show="isEditing" class="flex flex-col items-center p-4 rounded-lg bg-gray-100 gap-4 dark:bg-gray-800 transition duration cursor-pointer">
