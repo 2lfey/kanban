@@ -39,7 +39,7 @@ const time = computed(() => {
 </script>
 
 <template>
-	<div v-show="!isEditing" :class="card.isExpaired ? 'bg-red-600 dark:bg-red-600' : 'bg-gray-100 dark:bg-gray-800'"
+	<div  v-show="!isEditing" :class="card.isExpaired ? 'bg-red-600 dark:bg-red-600' : 'bg-gray-100 dark:bg-gray-800'"
 		class="group/card relative flex flex-col items-end p-4 rounded-lg transition duration cursor-pointer">
 		<div class="absolute hidden group-hover/card:flex top-2 right-2 rounded bg-gray-200 dark:bg-gray-700">
 

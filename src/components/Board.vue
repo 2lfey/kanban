@@ -1,10 +1,17 @@
 <script setup>
 import Card from './Card.vue'
+
+import draggable from "vuedraggable";
+
 import { columns } from '../board';
+
+import { ref } from 'vue'
 
 const props = defineProps({
 	board: Object,
 })
+
+const dragging = ref(false)
 
 </script>
 
@@ -16,11 +23,17 @@ const props = defineProps({
 				{{ column.title }}
 			</h2>
 
-			<div class="flex flex-col gap-4">
-				<Card v-for="(card, index) in column.items" @delete-card="column.onDelete" @update-card="column.onUpdate"
-					@move-left="column.onMoveLeft" @star-card="column.onStar" @move-right="column.onMoveRight" :can-move-left="column.title !== 'Planned'" :can-move-right="column.title !== 'Completed'"
-					:key="index" :card="card" />
-			</div>
+			<draggable :move="() => {}" :list="column.items" item-key="title" @start="dragging = true" @end="dragging = false" class="flex flex-col gap-4">
+				<template #item="{ element }">
+					<div class="">
+	<Card @delete-card="column.onDelete" @update-card="column.onUpdate" @move-left="column.onMoveLeft"
+							@star-card="column.onStar" @move-right="column.onMoveRight"
+							:can-move-left="column.title !== 'Planned'" :can-move-right="column.title !== 'Completed'" :card="element" />
+					</div>
+					
+				</template>
+			</draggable>
+
 		</section>
 
 	</div>
