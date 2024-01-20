@@ -1,11 +1,11 @@
 <script setup>
 import Card from './Card.vue'
 
-import { ref, reactive, onMounted, watch, onBeforeMount } from 'vue'
+import { ref, reactive, watch, onBeforeMount } from 'vue'
 
 import { useEventBus } from '../hooks/useEventBus';
 
-const { on } = useEventBus()
+const { emit, on } = useEventBus()
 
 const board = reactive({
 	planned: {
@@ -46,8 +46,11 @@ const columns = Object.entries(board).map((entry) => {
 		if (col.title === 'In progress') {
 			board.planned.items.push(val)
 		} else if (col.title === 'Testing') {
+			// Todo get cause
 			board.inProgress.items.push(val)
 		} else { // if (col.title === 'Completed') {
+			delete val.isExpaired
+
 			board.testing.items.push(val)
 		}
 	}
@@ -64,6 +67,16 @@ const columns = Object.entries(board).map((entry) => {
 		} else if (col.title === 'In progress') {
 			board.testing.items.push(val)
 		} else { // if (col.title === 'Testing') {
+			const [year, month, day] = val.deadline.split('-')
+			const now = new Date(Date.now())
+
+			console.log(year, month, day);
+			console.log(now);
+
+			if (Number(year) <= now.getFullYear() || (Number(month) <= now.getMonth() && Number(day) < now.getDay())) {
+				val.isExpaired = true
+			}
+
 			board.completed.items.push(val)
 		}
 	}

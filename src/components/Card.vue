@@ -1,5 +1,4 @@
 <script setup>
-
 import Input from './Input.vue';
 
 import { computed, ref } from 'vue'
@@ -40,13 +39,14 @@ const time = computed(() => {
 </script>
 
 <template>
-	<div v-show="!isEditing"
-		class="group/card relative flex flex-col items-end p-4 rounded-lg bg-gray-100 dark:bg-gray-800 transition duration cursor-pointer">
+	<div v-show="!isEditing" :class="card.isExpaired ? 'bg-red-600 dark:bg-red-600' : 'bg-gray-100 dark:bg-gray-800'"
+		class="group/card relative flex flex-col items-end p-4 rounded-lg transition duration cursor-pointer">
 		<div class="absolute hidden group-hover/card:flex top-2 right-2 rounded bg-gray-200 dark:bg-gray-700">
 
 			<!-- move left -->
 
-			<div v-show="canMoveLeft" @click="emit('moveLeft', card)" class="p-1.5 rounded hover:bg-gray-100 hover:dark:bg-gray-800">
+			<div v-show="canMoveLeft" @click="emit('moveLeft', card)"
+				class="p-1.5 rounded hover:bg-gray-100 hover:dark:bg-gray-800">
 				<svg class="w-4 h-4 text-primary-600 hover:text-primary-700" fill="currentColor" viewBox="0 0 16 16"
 					xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
 					<path clip-rule="evenodd" fill-rule="evenodd"
@@ -82,7 +82,8 @@ const time = computed(() => {
 
 			<!-- move rigfht -->
 
-			<div v-show="canMoveRight" @click="emit('moveRight', card)" class="p-1.5 rounded hover:bg-gray-100 hover:dark:bg-gray-800">
+			<div v-show="canMoveRight" @click="emit('moveRight', card)"
+				class="p-1.5 rounded hover:bg-gray-100 hover:dark:bg-gray-800">
 				<svg class="w-4 h-4 text-primary-600 hover:text-primary-700" fill="currentColor" viewBox="0 0 16 16"
 					xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
 					<path clip-rule="evenodd" fill-rule="evenodd"
@@ -98,6 +99,8 @@ const time = computed(() => {
 				{{ card.deadline }}
 			</span>
 		</h2>
+
+		<p v-show="!!card.cause" class="text-sm">{{ card.cause }}</p>
 
 		<p class="mt-4 w-full">{{ card.description }}</p>
 
@@ -128,5 +131,6 @@ const time = computed(() => {
 				class="px-3 py-1.5 font-semibold text-sm bg-primary-500 hover:bg-primary-700 rounded text-white">
 				Save
 			</button>
+		</div>
 	</div>
-</div></template>
+</template>
