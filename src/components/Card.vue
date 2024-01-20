@@ -100,7 +100,7 @@ const time = computed(() => {
 			</span>
 		</h2>
 
-		<p v-show="!!card.cause" class="text-sm">{{ card.cause }}</p>
+		<p v-show="!!card.cause" class="w-full mt-4 text-sm">{{ card.cause }}</p>
 
 		<p class="mt-4 w-full">{{ card.description }}</p>
 

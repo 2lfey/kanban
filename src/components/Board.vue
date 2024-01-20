@@ -26,6 +26,12 @@ const board = reactive({
 	}
 })
 
+on('set-cause', (card, cause) => {
+	board.testing.onDelete(card)
+	card.cause = cause
+	board.inProgress.items.push(card)
+})
+
 const columns = Object.entries(board).map((entry) => {
 	const col = entry[1]
 	col.onUpdate = (val, newVal) => {
@@ -41,14 +47,17 @@ const columns = Object.entries(board).map((entry) => {
 		if (col.title === 'Planned') {
 			return
 		}
-		col.onDelete(val)
 
 		if (col.title === 'In progress') {
+			col.onDelete(val)
 			board.planned.items.push(val)
 		} else if (col.title === 'Testing') {
-			// Todo get cause
-			board.inProgress.items.push(val)
+
+			emit('show-cause-form', val)
+			
 		} else { // if (col.title === 'Completed') {
+			col.onDelete(val)
+
 			delete val.isExpaired
 
 			board.testing.items.push(val)

@@ -2,23 +2,28 @@
 import Input from './Input.vue';
 
 import { useEventBus } from '../hooks/useEventBus';
+import { ref } from 'vue';
 
 const { emit } = useEventBus()
 
-const model = defineModel()
+const props = defineProps({
+    card: Object
+})
+
+const cause = ref(null)
 
 const onSetCause = () => {
-    emit('setCause', model)
+    emit('set-cause', props.card, cause)
 }
 
 </script>
 <template>
-    <div class="">
-        <Input title="Cause" placeholder="Card cause" v-model="model" />
+    <form @submit.prevent="$emit('onSubmit')" class="space-y-4">
+        <Input title="Cause" placeholder="Card cause" v-model="cause" />
 
-        <button @click="onSetCause"
-            class="px-3 py-1.5 font-semibold text-sm bg-primary-500 hover:bg-primary-700 rounded text-white">
+        <button type="submit" @click="onSetCause"
+            class="w-full px-3 py-1.5 font-semibold text-sm bg-primary-500 hover:bg-primary-700 rounded text-white">
             Move
         </button>
-    </div>
+    </form>
 </template>
